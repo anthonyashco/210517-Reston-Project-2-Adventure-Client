@@ -69,12 +69,14 @@
         </div>
     </div>
 </body>
-<script>
+<script type="module">
+    import settings from "../settings.js"
+
     const claimTableBody = document.getElementById("claimTableBody");
     const claimButton = document.getElementById("claimButton");
 
     async function sendClaim() {
-        const path = "http://localhost:5000/claim";
+        const path = settings.server + "/claim";
         const resp = await fetch(path);
         const claims = await resp.json();
         console.log(claims);

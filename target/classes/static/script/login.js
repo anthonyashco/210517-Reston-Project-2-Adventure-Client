@@ -18,7 +18,7 @@ async function login(event) {
     const user = await resp.json();
 
     if (user > 0) {
-        location.href = "claims.html";
+        location.href = "/html/claims.html";
     };
 };
 
