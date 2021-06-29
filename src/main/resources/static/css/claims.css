@@ -1,0 +1,30 @@
+.col-container {
+  margin: auto;
+  display: table;
+  width: 90%;
+}
+
+.col {
+  display: table-cell;
+  padding: 16px;
+  text-align: center;
+}
+
+.right {
+  float: right;
+}
+
+.danger {
+  background-color: red;
+}
+
+.block {
+  display: block;
+  width: 100%;
+  border: none;
+  background-color: #04aa6d;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+}
