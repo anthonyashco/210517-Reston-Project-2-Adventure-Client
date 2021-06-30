@@ -61,6 +61,6 @@ public class TestApp {
             ctx.result(claimsJson);
         });
 
-        app.start();
+        app.start(7500);
     }
 }
