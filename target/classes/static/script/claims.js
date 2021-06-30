@@ -13,25 +13,28 @@ const claimTableBody = document.getElementById("claimTableBody");
 const claimButton = document.getElementById("claimButton");
 
 async function sendClaim() {
-    const path = settings.server + "/claims";
-    const claim = document.getElementById("claim");
-    const amount = document.getElementById("amount");
+    const result = confirm("Are you sure you want to submit this claim?");
+    if(result){
+        const path = settings.server + "/claims";
+        const claim = document.getElementById("claim");
+        const amount = document.getElementById("amount");
     
-    const req = {
-        claim: claim.value,
-        amount: amount.value,
-    };
-    const config = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "id": userId,
-        },
-        body: JSON.stringify(req),
-    };
+        const req = {
+            claim: claim.value,
+            amount: amount.value,
+        };
+        const config = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "id": userId,
+            },
+            body: JSON.stringify(req),
+        };
 
-    const resp = await fetch(path, config);
-    getClaims();
+        const resp = await fetch(path, config);
+        getClaims();
+    }
 };
 
 async function getClaims() {
