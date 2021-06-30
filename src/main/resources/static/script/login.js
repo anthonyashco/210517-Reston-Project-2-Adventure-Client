@@ -6,15 +6,16 @@ if (typeof (Storage) !== "undefined") {
     console.log("Yikes! This browser doesn't support sessionStorage!");
 };
 
-async function login() {
+async function login(event) {
+    event.preventDefault();
     const username = document.getElementById("uname");
     const password = document.getElementById("psw");
     if (username.value === "" || password.value === "") {
         return
     };
     const form = {
-        user: username.value,
-        pass: password.value,
+        username: username.value,
+        password: password.value,
     };
     const path = settings.server + "/login";
     const config = {
@@ -25,7 +26,6 @@ async function login() {
 
     const resp = await fetch(path, config);
     const user = await resp.json();
-
     sessionStorage.adventureInsuranceUserId = user.id;
 
     if (user.id > 0) {
