@@ -21,6 +21,16 @@ public class TestApp {
         }
     }
 
+    static class Login {
+        public int id;
+
+        public Login (int id) {
+            this.id = id;
+        }
+    }
+
+    static List<Claim> claims = new ArrayList<>();
+
     public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
             config.enableCorsForAllOrigins();
@@ -28,21 +38,22 @@ public class TestApp {
             config.addStaticFiles("/static");
         });
 
+        Claim claim1 = new Claim("Barbecued arm", 500, false);
+        Claim claim2 = new Claim("Dented cuirass", 150, true);
+        claims.add(claim1);
+        claims.add(claim2);
+
         app.get("/", (ctx) -> ctx.render("/static/html/login.html"));
 
-        app.post("/login", (ctx) -> ctx.result("1"));
+        app.post("/login", (ctx) -> {
+            System.out.println(ctx.body());
+            ctx.result(gson.toJson(new Login(1)));
+        });
 
-        app.get("/claim", (ctx) -> {
-
-            Claim claim1 = new Claim("Barbecued arm", 500, false);
-            Claim claim2 = new Claim("Dented cuirass", 150, true);
-
-            List<Claim> claims = new ArrayList<>();
-            claims.add(claim1);
-            claims.add(claim2);
-
+        app.post("/claims", (ctx) -> {
+            Claim claim = gson.fromJson(ctx.body(), Claim.class);
+            claims.add(claim);
             String claimsJson = gson.toJson(claims);
-
             ctx.result(claimsJson);
         });
 

@@ -35,13 +35,14 @@
         <div class="col" style="background:silver">
             <label for="claim">Claim:</label>
             <select name="claim" id="claim" type="text">
+                <option disabled selected value>--Please select one--</option>
                 <option value="Broken sword">Broken Sword</option>
                 <option value="Broken rib">Broken Rib</option>
                 <option value="Broken heart">Broken Heart</option>
             </select>
             
             <label for="amount">Amount:</label>
-            <input name="amount" id="amount" type="number">
+            <input name="amount" id="amount" type="number" required>
             <button id="claimButton" class="block">Submit Claim</button>
         </div>
     </div>

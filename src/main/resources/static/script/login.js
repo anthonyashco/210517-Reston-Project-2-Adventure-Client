@@ -1,12 +1,21 @@
 import settings from "../settings.js";
 
-async function login(event) {
+if (typeof (Storage) !== "undefined") {
+    ;
+} else {
+    console.log("Yikes! This browser doesn't support sessionStorage!");
+};
+
+async function login() {
     const username = document.getElementById("uname");
     const password = document.getElementById("psw");
+    if (username.value === "" || password.value === "") {
+        return
+    };
     const form = {
         user: username.value,
         pass: password.value,
-    }
+    };
     const path = settings.server + "/login";
     const config = {
         method: "POST",
@@ -17,7 +26,9 @@ async function login(event) {
     const resp = await fetch(path, config);
     const user = await resp.json();
 
-    if (user > 0) {
+    sessionStorage.adventureInsuranceUserId = user.id;
+
+    if (user.id > 0) {
         location.href = "/html/claims.html";
     };
 };
