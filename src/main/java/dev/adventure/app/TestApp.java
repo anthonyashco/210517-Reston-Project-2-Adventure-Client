@@ -53,6 +53,10 @@ public class TestApp {
         app.post("/claims", (ctx) -> {
             Claim claim = gson.fromJson(ctx.body(), Claim.class);
             claims.add(claim);
+            ctx.result("success");
+        });
+
+        app.get("/claims", (ctx) -> {
             String claimsJson = gson.toJson(claims);
             ctx.result(claimsJson);
         });

@@ -1,7 +1,9 @@
 import settings from "../settings.js";
 
+let userId;
+
 if (typeof (Storage) !== "undefined") {
-    const userId = sessionStorage.adventureInsuranceUserId;
+    userId = sessionStorage.adventureInsuranceUserId;
     console.log(userId);
 } else {
     console.log("Yikes! This browser doesn't support sessionStorage!");
@@ -21,8 +23,25 @@ async function sendClaim() {
     };
     const config = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            "id": userId,
+        },
         body: JSON.stringify(req),
+    };
+
+    const resp = await fetch(path, config);
+    getClaims();
+};
+
+async function getClaims() {
+    const path = settings.server + "/claims";
+    const config = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "id": userId,
+        },
     };
 
     const resp = await fetch(path, config);
@@ -38,7 +57,7 @@ async function sendClaim() {
             </tr>`
     };
     claimTableBody.innerHTML = rows;
-};
+}
 
 function icon(approved) {
     console.log(approved)
@@ -50,3 +69,4 @@ function icon(approved) {
 }
 
 claimButton.addEventListener("click", sendClaim);
+document.addEventListener("DOMContentLoaded", getClaims());
