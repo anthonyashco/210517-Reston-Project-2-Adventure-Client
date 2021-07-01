@@ -41,7 +41,11 @@ async function sendClaim() {
         };
         const resp = await fetch(path, config);
         getClaims();
-    };
+        if(resp.status == 201){
+            alert("Yay");
+        }
+        else alert("Oh no, it seems your claim wasn't created. Try again");
+    }
 };
 
 async function getClaims() {
