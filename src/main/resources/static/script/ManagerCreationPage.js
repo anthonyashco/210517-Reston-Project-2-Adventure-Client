@@ -1,3 +1,11 @@
+import settings from "../settings.js";
+
+if (typeof (Storage) !== "undefined") {
+    ;
+} else {
+    console.log("Yikes! This browser doesn't support sessionStorage!");
+};
+
 async function confirmDetails(){
     let name = document.getElementById("nameInput")
     let username = document.getElementById("usernameInput")
@@ -25,19 +33,20 @@ async function confirmDetails(){
         return null
     }
     if (confirm("Are you sure you want to submit this information?")){
-        alert("implement createManager()")
+        createManager(name, username, password)
     } else {
         alert("not submitted")
     }
 }
 
-async function createManager(){
+async function createManager(name, username, password){
     const body = {
+        id:0,
         name:name.value,
         username:username.value,
         password:password.value
     };
-    const path = settings.server + "/mangers";
+    const path = settings.server + "/managers";
     const config = {
         method:"POST",
         headers: {"Content-Type":"application/json"},
@@ -45,12 +54,12 @@ async function createManager(){
     }
     const response = await fetch(path, config);
     const manager = await response.json();
-    sessionStorage.adventureInsuranceManagerId = manager.id;
-// get rid of session storage and redirect the user to the login page
     if (manager.id > 0){
-        location.href = "/html/claims.html"
+        alert("You successfully made yourself a manager!")
+        location.href = "/html/login.html"
     } else {
         alert("Something has gone wrong: returning to the login page")
         location.href = "/html/login.html";
     }
 }
+document.getElementById("createButton").addEventListener("click", confirmDetails)
