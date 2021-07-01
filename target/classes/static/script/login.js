@@ -26,8 +26,6 @@ async function login(event) {
 
     const resp = await fetch(path, config);
     const user = await resp.json();
-    console.log(user);
-
     sessionStorage.adventureInsuranceUserId = user.id;
 
     if (user.id > 0) {
