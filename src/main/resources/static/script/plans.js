@@ -18,27 +18,33 @@ async function choose(x) {
     if(result){
         const path = `${settings.server}/users/${userId}/plans/${x}`;
         const config = {
-            method: "POST",
+            method: "PUT",
             headers: { "id": userId },
         };
         const resp = await fetch(path, config);
         const user = await resp.json();
         planId = user.planId;
         sessionStorage.adventureInsurancePlanId = user.planId;
+        showPlan();
     };
 };
 
+function showPlan() {
+    plan.innerHTML = `${wordify(planId)} Plan`
+};
+
 function wordify(x) {
-    switch (x) {
+    switch (Number(x)) {
         case 1:
-            return "gold";
+            return "Gold";
         case 2:
-            return "silver";
+            return "Silver";
         case 3:
-            return "bronze";
-    }
-}
+            return "Bronze";
+    };
+};
 
 document.getElementById("choose1").addEventListener("click", () => {choose(1)}); // gold
 document.getElementById("choose2").addEventListener("click", () => {choose(2)}); // silver
 document.getElementById("choose3").addEventListener("click", () => {choose(3)}); // bronze
+document.addEventListener("DOMContentLoaded", showPlan());

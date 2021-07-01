@@ -82,11 +82,11 @@ function icon(approved) {
 };
 
 function showPlan() {
-    plan.innerHTML = `${wordify(Number(planId))} Plan`
+    plan.innerHTML = `${wordify(planId)} Plan`
 };
 
 function wordify(x) {
-    switch (x) {
+    switch (Number(x)) {
         case 1:
             return "Gold";
         case 2:
