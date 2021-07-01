@@ -1,16 +1,20 @@
 import settings from "../settings.js";
 
 let userId;
+let occupation;
+let planId;
 
 if (typeof (Storage) !== "undefined") {
     userId = sessionStorage.adventureInsuranceUserId;
-    console.log(userId);
+    occupation = sessionStorage.adventureInsuranceOccupation;
+    planId = sessionStorage.adventureInsurancePlanId;
 } else {
     console.log("Yikes! This browser doesn't support sessionStorage!");
 };
 
 const claimTableBody = document.getElementById("claimTableBody");
 const claimButton = document.getElementById("claimButton");
+const plan = document.getElementById("plan");
 
 async function sendClaim() {
     const result = confirm("Are you sure you want to submit this claim?");
@@ -67,16 +71,31 @@ async function getClaims() {
             </tr>`
     };
     claimTableBody.innerHTML = rows;
-}
+};
 
 function icon(approved) {
-    console.log(approved)
     if (approved === "Accepted") {
         return "fa fa-check"
     } else if (approved === "Rejected") {
         return "fa fa-remove"
-    }
-}
+    };
+};
+
+function showPlan() {
+    plan.innerHTML = `${wordify(Number(planId))} Plan`
+};
+
+function wordify(x) {
+    switch (x) {
+        case 1:
+            return "Gold";
+        case 2:
+            return "Silver";
+        case 3:
+            return "Bronze";
+    };
+};
 
 claimButton.addEventListener("click", sendClaim);
 document.addEventListener("DOMContentLoaded", getClaims());
+document.addEventListener("DOMContentLoaded", showPlan());
