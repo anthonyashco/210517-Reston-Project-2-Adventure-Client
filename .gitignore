@@ -1,5 +1,6 @@
 test_server.py
 */settings.js
+**/target/
 
 # Compiled class file
 *.class

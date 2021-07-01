@@ -30,6 +30,9 @@ async function login(event) {
 
     if (user.id > 0) {
         location.href = "/html/claims.html";
+    } else {
+        document.getElementById("message").innerText = "Noperino!";
+        return
     };
 };
 
