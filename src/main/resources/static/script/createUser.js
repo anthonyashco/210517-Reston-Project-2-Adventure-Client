@@ -2,11 +2,11 @@ import settings from "../settings.js";
 
 async function createUser(){
     const path = settings.server + "/users";
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-    const name = document.getElementById("name").value;
-    const occupation = document.getElementById("occupation").value;
-    const planId = document.getElementById("planId").value;
+    const username = document.getElementById("usernameInput").value;
+    const password = document.getElementById("passwordInput").value;
+    const name = document.getElementById("nameInput").value;
+    const occupation = document.getElementById("occupationInput").value;
+    const planId = document.getElementById("planSelectorInput").getAttribute("name");
 
     const req = {
         id: 0,
@@ -14,7 +14,7 @@ async function createUser(){
         name: name,
         username: username,
         password: password,
-        planId: null
+        planId: planId
     }
     const config = {
         method: "POST",
@@ -23,7 +23,6 @@ async function createUser(){
     };
 
     const resp = await fetch(path, config);
-    const body = await resp.json();
     if(resp.status == 201) alert("Created Successfully");
     else alert("Failed to create user");
 
@@ -34,18 +33,25 @@ async function getPlans(){
     console.log("I am in the getPlans function");
     const path = settings.server + "/plans";
     const planList = document.getElementById("planSelector");
-    let planContent = planList.getAttribute("innerHTML");
     const config = {
         method: "GET",
         headers: {"Content-Type": "application/json"},
     }
 
     const resp = await fetch(path,config);
+    console.log("I have made the request?");
+    console.log(resp);
     const plans = await resp.json();
-
+    console.log(plans);
+    let options = "<option  disabled selected value>--Please select a plan--</option>"
     for(let plan of plans){
-        planContent += `<option>${plan.name}</option>`;
+        options += `<option name="${plan.id}">${plan.name}</option>`;
+        console.log(`I tried adding ${plan.name} to the option select`);
+        console.log(options);
     }
+    planList.innerHTML+=options;
+    console.log(planList);
+    console.log("I am the end of the function?");
 }
 document.addEventListener("DOMContentLoaded", getPlans());
 const createButton = document.getElementById("createButton");
