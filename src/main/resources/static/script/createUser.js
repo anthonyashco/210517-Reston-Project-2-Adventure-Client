@@ -1,12 +1,35 @@
 import settings from "../settings.js";
 
+function validateInput(){
+    const username = document.getElementById("usernameInput").value;
+    const password = document.getElementById("passwordInput").value;
+    const passwordConfirm = document.getElementById("passwordConfirmInput").value;
+    const name = document.getElementById("nameInput").value;
+    const occupation = document.getElementById("occupationInput").value;
+    const optionsList = document.getElementById("planSelector");
+    const planId = optionsList.options[optionsList.selectedIndex].name;
+    if(username==="" || password===""||name===""||occupation===""||planId===""){
+        alert("Empty fields. Please fill them out");
+    } 
+    else if(password !== passwordConfirm){
+        alert("Passwords don't match");
+    } 
+    else{
+        createUser(username,password,name,occupation,planId);
+    }
+}
+
+
 async function createUser(){
     const path = settings.server + "/users";
     const username = document.getElementById("usernameInput").value;
     const password = document.getElementById("passwordInput").value;
     const name = document.getElementById("nameInput").value;
     const occupation = document.getElementById("occupationInput").value;
-    const planId = document.getElementById("planSelectorInput").getAttribute("name");
+    const optionsList = document.getElementById("planSelector");
+    console.log(optionsList);
+    const planId = optionsList.options[optionsList.selectedIndex].value;
+    console.log(planId);
 
     const req = {
         id: 0,
@@ -14,7 +37,7 @@ async function createUser(){
         name: name,
         username: username,
         password: password,
-        planId: planId
+        planId: parseFloat(planId)
     }
     const config = {
         method: "POST",
@@ -22,6 +45,7 @@ async function createUser(){
         body: JSON.stringify(req),
     };
 
+    console.log(config);
     const resp = await fetch(path, config);
     if(resp.status == 201) alert("Created Successfully");
     else alert("Failed to create user");
@@ -39,20 +63,20 @@ async function getPlans(){
     }
 
     const resp = await fetch(path,config);
-    console.log("I have made the request?");
-    console.log(resp);
     const plans = await resp.json();
-    console.log(plans);
-    let options = "<option  disabled selected value>--Please select a plan--</option>"
+    let options = "<option  disabled selected value name =\"\">--Please select a plan--</option>"
     for(let plan of plans){
-        options += `<option name="${plan.id}">${plan.name}</option>`;
-        console.log(`I tried adding ${plan.name} to the option select`);
-        console.log(options);
+        console.log(plan);
+        options += `<option value="${plan.planID}">${plan.name}</option>`;
+        console.log(plan.planID);
     }
     planList.innerHTML+=options;
-    console.log(planList);
-    console.log("I am the end of the function?");
 }
-document.addEventListener("DOMContentLoaded", getPlans());
+
+
+document.addEventListener("DOMContentLoaded", getPlans);
 const createButton = document.getElementById("createButton");
-createButton.addEventListener("click",createUser);
+createButton.addEventListener("click",validateInput);
+
+
+
