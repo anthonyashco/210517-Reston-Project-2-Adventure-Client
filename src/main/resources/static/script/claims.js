@@ -82,7 +82,8 @@ function icon(approved) {
 };
 
 function showPlan() {
-    plan.innerHTML = `${wordify(planId)} Plan`
+    plan.innerHTML = `${wordify(planId)} Plan`;
+    plan.style.color = colorizer(planId);
 };
 
 function wordify(x) {
@@ -93,6 +94,17 @@ function wordify(x) {
             return "Silver";
         case 3:
             return "Bronze";
+    };
+};
+
+function colorizer(x) {
+    switch (Number(x)) {
+        case 1:
+            return "gold";
+        case 2:
+            return "silver";
+        case 3:
+            return "peru";
     };
 };
 
