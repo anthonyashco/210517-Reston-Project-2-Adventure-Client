@@ -26,12 +26,13 @@ async function login(event) {
 
     const resp = await fetch(path, config);
     const user = await resp.json();
-    console.log(user);
-
     sessionStorage.adventureInsuranceUserId = user.id;
 
     if (user.id > 0) {
         location.href = "/html/claims.html";
+    } else {
+        document.getElementById("message").innerText = "Noperino!";
+        return
     };
 };
 

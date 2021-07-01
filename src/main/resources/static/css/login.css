@@ -2,6 +2,12 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.crt-mng{
+  position: absolute; 
+  top: 2%; 
+  right: 2%;
+}
+
 /* Full-width input fields */
 input[type="text"],
 input[type="password"] {
