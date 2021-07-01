@@ -20,8 +20,12 @@ async function sendClaim() {
         const amount = document.getElementById("amount");
         
         const req = {
-            claim: claim.value,
+            id: 0,
+            date: 0,
+            reason: claim.value,
             amount: amount.value,
+            status: "Pending",
+            userId: userId
         };
         const config = {
             method: "POST",
@@ -31,7 +35,6 @@ async function sendClaim() {
             },
             body: JSON.stringify(req),
         };
-
         const resp = await fetch(path, config);
         getClaims();
     }
