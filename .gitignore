@@ -2,6 +2,10 @@ test_server.py
 */settings.js
 **/target/
 
+# IDE files
+.idea/
+*.iml
+
 # Compiled class file
 *.class
 
