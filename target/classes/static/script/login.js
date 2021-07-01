@@ -24,14 +24,22 @@ async function login(event) {
         body: JSON.stringify(form),
     };
 
-    const resp = await fetch(path, config);
+    const login = await fetch(path, config);
+    const userId = await login.json();
+
+    const userPath = `${settings.server}/users/${userId.id}`;
+    const resp = await fetch(userPath, { method: "GET" });
     const user = await resp.json();
-    console.log(user);
 
     sessionStorage.adventureInsuranceUserId = user.id;
+    sessionStorage.adventureInsuranceOccupation = user.occupation;
+    sessionStorage.adventureInsurancePlanId = user.planId;
 
     if (user.id > 0) {
         location.href = "/html/claims.html";
+    } else {
+        document.getElementById("message").innerText = "Noperino!";
+        return
     };
 };
 
