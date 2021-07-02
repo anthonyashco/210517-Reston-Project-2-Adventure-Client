@@ -11,10 +11,9 @@
 <body>
     <div id="id01" class="modal">
 
-        <form class="modal-content animate">
-            <div>
-                <span><a type="button" id="createManagerButton" class="btn btn-danger btn-sm crt-mng" href="/html/ManagerCreationPage.html">Create Manager</a></span>
-            </div>
+        <form class="modal-content animate" onsubmit="return false">
+            <span><a type="button" id="createCustomerButton" class="btn btn-danger btn-sm left-btn" href="/html/UserCreationPage.html">Create new Account?</a></span>
+            <span><a type="button" id="createManagerButton" class="btn btn-danger btn-sm crt-mng" href="/html/ManagerCreationPage.html">Create Manager</a></span>
             <div class="imgcontainer">
                 <img src="/image/adventure_cat.jpg" alt="Avatar" class="avatar">
             </div>
@@ -25,8 +24,7 @@
 
                 <label for="psw"><b>Password</b></label>
                 <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
-                   <span class="right danger"><a type="button" class="btn" id="createCustomerButton" href="/html/UserCreationPage.html"> Create new Account?</a></span>
-                <button type="submit" id="loginButton">Login</button><br>
+                <button class="login-button" type="submit" id="loginButton">Login</button><button class="manager-button" type="submit" id="managerButton">Manage</button><br>
                 <div id="message"></div>
             </div>
         </form>

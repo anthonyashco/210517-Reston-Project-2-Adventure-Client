@@ -3,11 +3,13 @@ import settings from "../settings.js";
 let userId;
 let occupation;
 let planId;
+let manager;
 
 if (typeof (Storage) !== "undefined") {
     userId = sessionStorage.adventureInsuranceUserId;
     occupation = sessionStorage.adventureInsuranceOccupation;
     planId = sessionStorage.adventureInsurancePlanId;
+    manager = ((sessionStorage.adventureInsuranceManager) === "true" ? true : false);
     console.log(userId);
 } else {
     console.log("Yikes! This browser doesn't support sessionStorage!");
@@ -30,9 +32,12 @@ async function choose(x) {
 };
 
 function showPlan() {
-    plan.innerHTML = `${wordify(planId)} Plan`;
-    plan.style.color = colorizer(planId);
-
+    if (manager) {
+        plan.innerHTML = "Manager";
+    } else {
+        plan.innerHTML = `${wordify(planId)} Plan`;
+        plan.style.color = colorizer(planId);
+    }
 };
 
 function wordify(x) {
