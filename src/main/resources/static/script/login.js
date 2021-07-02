@@ -6,8 +6,7 @@ if (typeof (Storage) !== "undefined") {
     console.log("Yikes! This browser doesn't support sessionStorage!");
 };
 
-async function login(event) {
-    event.preventDefault();
+async function login(route) {
     const username = document.getElementById("uname");
     const password = document.getElementById("psw");
     if (username.value === "" || password.value === "") {
@@ -17,7 +16,7 @@ async function login(event) {
         username: username.value,
         password: password.value,
     };
-    const path = settings.server + "/login";
+    const path = settings.server + route;
     const config = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,20 +26,26 @@ async function login(event) {
     const login = await fetch(path, config);
     const userId = await login.json();
 
-    const userPath = `${settings.server}/users/${userId.id}`;
-    const resp = await fetch(userPath, { method: "GET" });
-    const user = await resp.json();
-
-    sessionStorage.adventureInsuranceUserId = user.id;
-    sessionStorage.adventureInsuranceOccupation = user.occupation;
-    sessionStorage.adventureInsurancePlanId = user.planId;
-
-    if (user.id > 0) {
+    if (userId.id > 0) {
+        let userPath;
+        if (route === "/login") {
+            userPath = `${settings.server}/users/${userId.id}`;
+        } else if (route === "/login/managers") {
+            userPath = `${settings.server}/managers/${userId.id}`;
+        }
+        const resp = await fetch(userPath, { method: "GET" });
+        const user = await resp.json();
+        sessionStorage.adventureInsuranceUserId = user.id;
+        sessionStorage.adventureInsuranceOccupation = user.occupation;
+        sessionStorage.adventureInsurancePlanId = user.planId;
+        sessionStorage.adventureInsuranceManager = (route === "/login/managers" ? true : false);
         location.href = "/html/claims.html";
+        return true
     } else {
         document.getElementById("message").innerText = "Noperino!";
-        return
+        return false
     };
 };
 
-document.getElementById("loginButton").addEventListener("click", login);
+document.getElementById("loginButton").addEventListener("click", () => { login("/login") });
+document.getElementById("managerButton").addEventListener("click", () => { login("/login/managers") });
