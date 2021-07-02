@@ -7,15 +7,17 @@ function validateInput(){
     const name = document.getElementById("nameInput").value;
     const occupation = document.getElementById("occupationInput").value;
     const optionsList = document.getElementById("planSelector");
-    const planId = optionsList.options[optionsList.selectedIndex].name;
-    if(username==="" || password===""||name===""||occupation===""||planId===""){
+    const planId = optionsList.options[optionsList.selectedIndex];
+    console.log(planId);
+    console.log(planId.value);
+    if(username==="" || password===""||name===""||occupation===""||planId.value===""){
         alert("Empty fields. Please fill them out");
     } 
     else if(password !== passwordConfirm){
         alert("Passwords don't match");
     } 
     else{
-        createUser(username,password,name,occupation,planId);
+        createUser(username,password,name,occupation,planId.value);
     }
 }
 
@@ -27,9 +29,7 @@ async function createUser(){
     const name = document.getElementById("nameInput").value;
     const occupation = document.getElementById("occupationInput").value;
     const optionsList = document.getElementById("planSelector");
-    console.log(optionsList);
     const planId = optionsList.options[optionsList.selectedIndex].value;
-    console.log(planId);
 
     const req = {
         id: 0,
@@ -44,8 +44,6 @@ async function createUser(){
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(req),
     };
-
-    console.log(config);
     const resp = await fetch(path, config);
     if(resp.status == 201) alert("Created Successfully");
     else alert("Failed to create user");
@@ -54,7 +52,6 @@ async function createUser(){
 }
 
 async function getPlans(){
-    console.log("I am in the getPlans function");
     const path = settings.server + "/plans";
     const planList = document.getElementById("planSelector");
     const config = {
@@ -64,11 +61,9 @@ async function getPlans(){
 
     const resp = await fetch(path,config);
     const plans = await resp.json();
-    let options = "<option  disabled selected value name =\"\">--Please select a plan--</option>"
+    let options = "<option  disabled selected value name=\"fail\">--Please select a plan--</option>"
     for(let plan of plans){
-        console.log(plan);
         options += `<option value="${plan.planID}">${plan.name}</option>`;
-        console.log(plan.planID);
     }
     planList.innerHTML+=options;
 }
