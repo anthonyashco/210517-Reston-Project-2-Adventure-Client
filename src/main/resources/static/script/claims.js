@@ -15,6 +15,7 @@ if (typeof (Storage) !== "undefined") {
 const claimTableBody = document.getElementById("claimTableBody");
 const claimButton = document.getElementById("claimButton");
 const plan = document.getElementById("plan");
+// TODO: Hide elements based on user role.
 
 async function sendClaim() {
     const result = confirm("Are you sure you want to submit this claim?");
@@ -68,6 +69,26 @@ async function getClaims() {
             <td>${claim.reason}</td>
             <td>${claim.amount}</td>
             <td><i class="${icon(claim.status)}"></i></td>
+            <td>
+                <div class="btn-group" role="group">
+                    <button
+                        claimId=${claim.id}
+                        choice="approve"
+                        type="button"
+                        class="btn-choice"
+                    >
+                    Sí
+                    </button>&nbsp;
+                    <button
+                        claimId=${claim.id}
+                        choice="deny"
+                        type="button"
+                        class="btn-choice"
+                    >
+                    No
+                    </button>
+                </div>
+            </td>
             </tr>`
     };
     claimTableBody.innerHTML = rows;
@@ -108,6 +129,16 @@ function colorizer(x) {
     };
 };
 
+function choiceButton(event) {
+    // TODO: Needs a route for approval.
+    console.log(`${event.target.getAttribute("choice")} ${event.target.getAttribute("claimId")}`)
+}
+
 claimButton.addEventListener("click", sendClaim);
 document.addEventListener("DOMContentLoaded", getClaims());
 document.addEventListener("DOMContentLoaded", showPlan());
+document.body.addEventListener("click", (event) => {
+    if (event.target.className === "btn-choice") {
+        choiceButton(event);
+    }
+});
