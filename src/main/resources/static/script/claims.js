@@ -124,8 +124,12 @@ function icon(approved) {
 };
 
 function showPlan() {
-    plan.innerHTML = `${wordify(planId)} Plan`;
-    plan.style.color = colorizer(planId);
+    if (manager) {
+        plan.innerHTML = "Manager";
+    } else {
+        plan.innerHTML = `${wordify(planId)} Plan`;
+        plan.style.color = colorizer(planId);
+    }
 };
 
 function wordify(x) {
