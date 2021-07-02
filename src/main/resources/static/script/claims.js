@@ -5,6 +5,7 @@ let occupation;
 let planId;
 let manager;
 let dispType = "pending";
+let rowCount;
 
 if (typeof (Storage) !== "undefined") {
     userId = sessionStorage.adventureInsuranceUserId;
@@ -19,6 +20,7 @@ const claimTableBody = document.getElementById("claimTableBody");
 const claimButton = document.getElementById("claimButton");
 const plan = document.getElementById("plan");
 const currentView = document.getElementById("currentView");
+const claimCount = document.getElementById("count");
 
 async function sendClaim() {
     const result = confirm("Are you sure you want to submit this claim?");
@@ -77,8 +79,10 @@ async function getClaims() {
     }
 
     let rows = "";
+    let count = 0;
     for (let claim of claims) {
         if (!manager || (manager && show(claim.status))) {
+            count += 1;
             rows += `
                 <tr>
                 <td>${claim.reason}</td>
@@ -113,7 +117,9 @@ async function getClaims() {
                 </tr>`
         }
     };
+    rowCount = count;
     claimTableBody.innerHTML = rows;
+    claimCount.innerText = `Claims: ${rowCount}`
 };
 
 function icon(approved) {
@@ -197,7 +203,7 @@ function views(view) {
     dispType = view;
     getClaims();
     currentView.innerText = `Current View: ${dispType}`;
-}
+};
 
 claimButton.addEventListener("click", sendClaim);
 document.addEventListener("DOMContentLoaded", loaded());
@@ -205,7 +211,7 @@ document.getElementById("pending").addEventListener("click", () => {views("pendi
 document.getElementById("completed").addEventListener("click", () => {views("completed")});
 document.getElementById("all").addEventListener("click", () => {views("all")});
 document.body.addEventListener("click", (event) => {
-    if (event.target.className === "btn-choice") {
+    if (event.target.className.includes("btn-choice")) {
         choiceButton(event);
     }
 });
