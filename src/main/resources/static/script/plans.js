@@ -3,11 +3,13 @@ import settings from "../settings.js";
 let userId;
 let occupation;
 let planId;
+let manager;
 
 if (typeof (Storage) !== "undefined") {
     userId = sessionStorage.adventureInsuranceUserId;
     occupation = sessionStorage.adventureInsuranceOccupation;
     planId = sessionStorage.adventureInsurancePlanId;
+    manager = ((sessionStorage.adventureInsuranceManager) === "true" ? true : false);
     console.log(userId);
 } else {
     console.log("Yikes! This browser doesn't support sessionStorage!");

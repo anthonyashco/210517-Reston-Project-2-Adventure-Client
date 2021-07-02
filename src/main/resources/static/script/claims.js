@@ -3,11 +3,14 @@ import settings from "../settings.js";
 let userId;
 let occupation;
 let planId;
+let manager;
+let dispType = "pending";
 
 if (typeof (Storage) !== "undefined") {
     userId = sessionStorage.adventureInsuranceUserId;
     occupation = sessionStorage.adventureInsuranceOccupation;
     planId = sessionStorage.adventureInsurancePlanId;
+    manager = ((sessionStorage.adventureInsuranceManager) === "true" ? true : false);
 } else {
     console.log("Yikes! This browser doesn't support sessionStorage!");
 };
@@ -15,7 +18,6 @@ if (typeof (Storage) !== "undefined") {
 const claimTableBody = document.getElementById("claimTableBody");
 const claimButton = document.getElementById("claimButton");
 const plan = document.getElementById("plan");
-// TODO: Hide elements based on user role.
 
 async function sendClaim() {
     const result = confirm("Are you sure you want to submit this claim?");
@@ -61,35 +63,54 @@ async function getClaims() {
 
     const resp = await fetch(path, config);
     const claims = await resp.json();
-    console.log(claims);
+
+    function show(status) {
+        switch (dispType) {
+            case "pending":
+                return (status === "Pending" ? true : false);
+            case "all":
+                return true;
+            case "completed":
+                return (status === "Pending" ? false : true);
+        }
+    }
 
     let rows = "";
     for (let claim of claims) {
-        rows += `<tr>
-            <td>${claim.reason}</td>
-            <td>${claim.amount}</td>
-            <td><i class="${icon(claim.status)}"></i></td>
-            <td>
-                <div class="btn-group" role="group">
-                    <button
-                        claimId=${claim.id}
-                        choice="approve"
-                        type="button"
-                        class="btn-choice"
-                    >
-                    Sí
-                    </button>&nbsp;
-                    <button
-                        claimId=${claim.id}
-                        choice="deny"
-                        type="button"
-                        class="btn-choice"
-                    >
-                    No
-                    </button>
-                </div>
-            </td>
-            </tr>`
+        if (!manager || (manager && show(claim.status))) {
+            rows += `
+                <tr>
+                <td>${claim.reason}</td>
+                <td>${claim.amount}</td>
+                <td><i class="${icon(claim.status)}"></i></td>
+                <td>`;
+            
+            if (manager) {
+                rows += `
+                    <div class="btn-group" role="group">
+                        <button
+                            claimId=${claim.id}
+                            choice="Accepted"
+                            type="button"
+                            class="btn-choice"
+                        >
+                        Sí
+                        </button>&nbsp;
+                        <button
+                            claimId=${claim.id}
+                            choice="Rejected"
+                            type="button"
+                            class="btn-choice"
+                        >
+                        No
+                        </button>
+                    </div>`
+            }
+
+            rows += `
+                </td>
+                </tr>`
+        }
     };
     claimTableBody.innerHTML = rows;
 };
@@ -129,14 +150,53 @@ function colorizer(x) {
     };
 };
 
-function choiceButton(event) {
-    // TODO: Needs a route for approval.
+async function choiceButton(event) {
+    const path = `${settings.server}/claims/managers/${event.target.getAttribute("claimId")}`
+    const req = {
+        id: 0,
+        date: 0.0,
+        amount: 0.0,
+        reason: "",
+        status: event.target.getAttribute("choice"),
+        userId: 0,
+    };
+    const config = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "id": userId,
+        },
+        body: JSON.stringify(req),
+    };
+    const resp = await fetch(path, config);
+    console.log(await resp.json());
     console.log(`${event.target.getAttribute("choice")} ${event.target.getAttribute("claimId")}`);
+    getClaims();
 };
 
+function checkRole() {
+    if (manager) {
+        document.getElementById("claims").style.display = "none";
+        document.getElementById("views").style.display = "block";
+    }
+};
+
+function loaded() {
+    getClaims();
+    showPlan();
+    checkRole();
+};
+
+function views(view) {
+    dispType = view;
+    getClaims();
+}
+
 claimButton.addEventListener("click", sendClaim);
-document.addEventListener("DOMContentLoaded", getClaims());
-document.addEventListener("DOMContentLoaded", showPlan());
+document.addEventListener("DOMContentLoaded", loaded());
+document.getElementById("pending").addEventListener("click", () => {views("pending")});
+document.getElementById("completed").addEventListener("click", () => {views("completed")});
+document.getElementById("all").addEventListener("click", () => {views("all")});
 document.body.addEventListener("click", (event) => {
     if (event.target.className === "btn-choice") {
         choiceButton(event);
