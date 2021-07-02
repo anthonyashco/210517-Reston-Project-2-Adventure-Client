@@ -18,6 +18,7 @@ if (typeof (Storage) !== "undefined") {
 const claimTableBody = document.getElementById("claimTableBody");
 const claimButton = document.getElementById("claimButton");
 const plan = document.getElementById("plan");
+const currentView = document.getElementById("currentView");
 
 async function sendClaim() {
     const result = confirm("Are you sure you want to submit this claim?");
@@ -182,6 +183,7 @@ function checkRole() {
     if (manager) {
         document.getElementById("claims").style.display = "none";
         document.getElementById("views").style.display = "block";
+        currentView.innerText = `Current View: ${dispType}`;
     }
 };
 
@@ -194,6 +196,7 @@ function loaded() {
 function views(view) {
     dispType = view;
     getClaims();
+    currentView.innerText = `Current View: ${dispType}`;
 }
 
 claimButton.addEventListener("click", sendClaim);
