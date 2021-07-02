@@ -131,8 +131,8 @@ function colorizer(x) {
 
 function choiceButton(event) {
     // TODO: Needs a route for approval.
-    console.log(`${event.target.getAttribute("choice")} ${event.target.getAttribute("claimId")}`)
-}
+    console.log(`${event.target.getAttribute("choice")} ${event.target.getAttribute("claimId")}`);
+};
 
 claimButton.addEventListener("click", sendClaim);
 document.addEventListener("DOMContentLoaded", getClaims());
