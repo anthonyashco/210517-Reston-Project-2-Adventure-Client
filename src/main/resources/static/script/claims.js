@@ -92,7 +92,7 @@ async function getClaims() {
                             claimId=${claim.id}
                             choice="Accepted"
                             type="button"
-                            class="btn-choice"
+                            class="btn-choice accept"
                         >
                         Sí
                         </button>&nbsp;
@@ -100,7 +100,7 @@ async function getClaims() {
                             claimId=${claim.id}
                             choice="Rejected"
                             type="button"
-                            class="btn-choice"
+                            class="btn-choice deny"
                         >
                         No
                         </button>
