@@ -58,8 +58,7 @@ async function createManager(name, username, password){
         alert("You successfully made yourself a manager!")
         location.href = "/html/login.html"
     } else {
-        alert("Something has gone wrong: returning to the login page")
-        location.href = "/html/login.html";
+        alert(manager)
     }
 }
 document.getElementById("createButton").addEventListener("click", confirmDetails)
