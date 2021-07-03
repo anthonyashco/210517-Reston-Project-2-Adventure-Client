@@ -28,15 +28,7 @@ async function confirmDetails(){
         alert("Confirm your password.")
         return null
     }
-    if (checkbox.checked === false){
-        alert("Please click the checkbox: this is a legally binding necessity")
-        return null
-    }
-    if (confirm("Are you sure you want to submit this information?")){
-        createManager(name, username, password)
-    } else {
-        alert("not submitted")
-    }
+    createManager(name, username, password)
 }
 
 async function createManager(name, username, password){
