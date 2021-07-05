@@ -55,7 +55,13 @@ async function sendClaim() {
 };
 
 async function getClaims() {
-    const path = settings.server + "/claims";
+    let path;
+    if (manager) {
+        path = `${settings.server}/claims`;
+    } else {
+        path = `${settings.server}/claims/${userId}`;
+    };
+
     const config = {
         method: "GET",
         headers: {
